@@ -1,0 +1,6 @@
+Django>=5.2,<7.0
+djangorestframework>=3.16,<4.0
+SQLAlchemy>=2.0,<3.0
+marshmallow>=3.26,<5.0
+PyMySQL>=1.1,<2.0
+python-dotenv>=1.1,<2.0
