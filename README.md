@@ -10,7 +10,7 @@ A learning project built with Django REST Framework, SQLAlchemy `scoped_session`
 | GET / POST | `/api/employees/` | List employees / create an employee |
 | GET | `/api/employees/{employee_id}/` | Get one employee |
 | PATCH | `/api/employees/{employee_id}/hourly-rate/` | Change current hourly rate |
-| GET / POST | `/api/employees/{employee_id}/shifts/` | List / schedule shifts |
+| GET / POST | `/api/employees/{employee_id}/shifts/` | List (10 per page) / schedule shifts |
 | GET / PATCH / DELETE | `/api/shifts/{shift_id}/` | Retrieve / edit times / delete a shift |
 | GET | `/api/employees/{employee_id}/forecasted-pay/?from=YYYY-MM-DD&to=YYYY-MM-DD` | Summarize planned hours and pay for inclusive dates |
 
@@ -75,7 +75,7 @@ Datetimes must include a timezone and use whole minutes. They are converted to U
 
 Optional inclusive date filters for listing:
 
-`GET /api/employees/1/shifts/?from=2026-10-01&to=2026-10-31`
+`GET /api/employees/1/shifts/?from=2026-10-01&to=2026-10-31&page=1`
 
 Forecast for an inclusive date range:
 

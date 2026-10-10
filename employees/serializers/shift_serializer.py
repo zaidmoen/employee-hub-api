@@ -55,7 +55,8 @@ class ShiftOutputSchema(Schema):
         minutes = Decimal(str(int((end - start).total_seconds() // 60)))
         return minutes / Decimal("60")
     def get_scheduled_hours(self, shift):
-        return f"{self.duration_hours(shift):.2f}"
+        hours = self.duration_hours(shift)
+        return f"{hours.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):.2f}"
     def get_forecasted_pay(self, shift):
         pay = self.duration_hours(shift) * shift.hourly_rate_snapshot
         return f"{pay.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):.2f}"

@@ -1,5 +1,5 @@
 from datetime import datetime, time, timedelta, timezone
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from rest_framework.exceptions import APIException, NotFound, ValidationError
 from sqlalchemy.exc import IntegrityError
@@ -127,13 +127,21 @@ class ShiftComponent:
 
         total_hours = sum((self._hours(shift) for shift in shifts), Decimal("0"))
         total_pay = sum((self._pay(shift) for shift in shifts), Decimal("0"))
+        rounded_hours = total_hours.quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
+        rounded_pay = total_pay.quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
         return {
             "employee_id": employee_id,
             "from": values["from_date"].isoformat(),
             "to": values["to_date"].isoformat(),
             "shift_count": len(shifts),
-            "scheduled_hours": f"{total_hours:.2f}",
-            "forecasted_pay": f"{total_pay:.2f}",
+            "scheduled_hours": f"{rounded_hours:.2f}",
+            "forecasted_pay": f"{rounded_pay:.2f}",
         }
 
     def _raise_if_overlap(self, employee_id, start, end, exclude_id=None):

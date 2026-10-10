@@ -6,6 +6,11 @@ from employees.components.shift_component import ShiftComponent
 from employees.permissions import IsAuthenticatedAndAdminWrite
 from employees.serializers.shift_serializer import ShiftOutputSchema
 
+
+class ShiftPagination(PageNumberPagination):
+    page_size = 10
+
+
 class EmployeeShiftViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticatedAndAdminWrite]
     component_class = ShiftComponent
@@ -15,7 +20,7 @@ class EmployeeShiftViewSet(viewsets.ViewSet):
             employee_id,
             request.query_params,
         )
-        paginator = PageNumberPagination()
+        paginator = ShiftPagination()
         page = paginator.paginate_queryset(shifts, request, view=self)
         data = ShiftOutputSchema(many=True).dump(page)
         return paginator.get_paginated_response(data)
