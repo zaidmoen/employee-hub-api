@@ -1,11 +1,24 @@
 from django.urls import path
 
+from employees.controllers.attendance_controller import (
+    AttendanceViewSet,
+    EmployeeAttendanceViewSet,
+    ShiftAttendanceViewSet,
+)
 from employees.controllers.employee_controller import (
     EmployeeRateViewSet,
     EmployeeViewSet,
 )
+from employees.controllers.organization_controller import (
+    DepartmentViewSet,
+    EmployeeProfileViewSet,
+    PositionViewSet,
+)
+from employees.controllers.payroll_controller import PayrollPeriodViewSet
 from employees.controllers.shift_controller import (
-    EmployeeShiftViewSet, ForecastedPayViewSet, ScheduledShiftViewSet,
+    EmployeeShiftViewSet,
+    ForecastedPayViewSet,
+    ScheduledShiftViewSet,
 )
 
 # Keep URLs explicit so each HTTP method clearly maps to a ViewSet action.
@@ -21,14 +34,29 @@ urlpatterns = [
         name="employee-detail",
     ),
     path(
+        "employees/<int:employee_id>/profile/",
+        EmployeeProfileViewSet.as_view({"get": "retrieve", "put": "upsert"}),
+        name="employee-profile",
+    ),
+    path(
         "employees/<int:employee_id>/hourly-rate/",
         EmployeeRateViewSet.as_view({"patch": "update_rate"}),
         name="employee-hourly-rate",
     ),
     path(
+        "employees/<int:employee_id>/rate-history/",
+        EmployeeRateViewSet.as_view({"get": "history"}),
+        name="employee-rate-history",
+    ),
+    path(
         "employees/<int:employee_id>/shifts/",
         EmployeeShiftViewSet.as_view({"get": "list", "post": "create"}),
         name="employee-shifts",
+    ),
+    path(
+        "employees/<int:employee_id>/attendance/",
+        EmployeeAttendanceViewSet.as_view({"get": "list"}),
+        name="employee-attendance",
     ),
     path(
         "shifts/<int:pk>/",
@@ -40,8 +68,58 @@ urlpatterns = [
         name="scheduled-shift-detail",
     ),
     path(
+        "shifts/<int:shift_id>/clock-in/",
+        ShiftAttendanceViewSet.as_view({"post": "clock_in"}),
+        name="shift-clock-in",
+    ),
+    path(
+        "attendance/<int:pk>/",
+        AttendanceViewSet.as_view({"get": "retrieve"}),
+        name="attendance-detail",
+    ),
+    path(
+        "attendance/<int:pk>/clock-out/",
+        AttendanceViewSet.as_view({"post": "clock_out"}),
+        name="attendance-clock-out",
+    ),
+    path(
         "employees/<int:employee_id>/forecasted-pay/",
         ForecastedPayViewSet.as_view({"get": "forecast"}),
         name="employee-forecasted-pay",
+    ),
+    path(
+        "departments/",
+        DepartmentViewSet.as_view({"get": "list", "post": "create"}),
+        name="department-list",
+    ),
+    path(
+        "positions/",
+        PositionViewSet.as_view({"get": "list", "post": "create"}),
+        name="position-list",
+    ),
+    path(
+        "payroll/periods/",
+        PayrollPeriodViewSet.as_view({"get": "list", "post": "create"}),
+        name="payroll-period-list",
+    ),
+    path(
+        "payroll/periods/<int:pk>/",
+        PayrollPeriodViewSet.as_view({"get": "retrieve"}),
+        name="payroll-period-detail",
+    ),
+    path(
+        "payroll/periods/<int:pk>/records/",
+        PayrollPeriodViewSet.as_view({"get": "records"}),
+        name="payroll-period-records",
+    ),
+    path(
+        "payroll/periods/<int:pk>/calculate/",
+        PayrollPeriodViewSet.as_view({"post": "calculate"}),
+        name="payroll-period-calculate",
+    ),
+    path(
+        "payroll/periods/<int:pk>/finalize/",
+        PayrollPeriodViewSet.as_view({"post": "finalize"}),
+        name="payroll-period-finalize",
     ),
 ]
