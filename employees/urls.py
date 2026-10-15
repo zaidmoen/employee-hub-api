@@ -1,5 +1,10 @@
 from django.urls import path
 
+from employees.controllers.attendance_controller import (
+    AttendanceViewSet,
+    EmployeeAttendanceViewSet,
+    ShiftAttendanceViewSet,
+)
 from employees.controllers.employee_controller import (
     EmployeeRateViewSet,
     EmployeeViewSet,
@@ -48,6 +53,11 @@ urlpatterns = [
         name="employee-shifts",
     ),
     path(
+        "employees/<int:employee_id>/attendance/",
+        EmployeeAttendanceViewSet.as_view({"get": "list"}),
+        name="employee-attendance",
+    ),
+    path(
         "shifts/<int:pk>/",
         ScheduledShiftViewSet.as_view({
             "get": "retrieve",
@@ -55,6 +65,21 @@ urlpatterns = [
             "delete": "destroy",
         }),
         name="scheduled-shift-detail",
+    ),
+    path(
+        "shifts/<int:shift_id>/clock-in/",
+        ShiftAttendanceViewSet.as_view({"post": "clock_in"}),
+        name="shift-clock-in",
+    ),
+    path(
+        "attendance/<int:pk>/",
+        AttendanceViewSet.as_view({"get": "retrieve"}),
+        name="attendance-detail",
+    ),
+    path(
+        "attendance/<int:pk>/clock-out/",
+        AttendanceViewSet.as_view({"post": "clock_out"}),
+        name="attendance-clock-out",
     ),
     path(
         "employees/<int:employee_id>/forecasted-pay/",
