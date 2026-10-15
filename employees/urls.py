@@ -14,6 +14,7 @@ from employees.controllers.organization_controller import (
     EmployeeProfileViewSet,
     PositionViewSet,
 )
+from employees.controllers.payroll_controller import PayrollPeriodViewSet
 from employees.controllers.shift_controller import (
     EmployeeShiftViewSet,
     ForecastedPayViewSet,
@@ -95,5 +96,30 @@ urlpatterns = [
         "positions/",
         PositionViewSet.as_view({"get": "list", "post": "create"}),
         name="position-list",
+    ),
+    path(
+        "payroll/periods/",
+        PayrollPeriodViewSet.as_view({"get": "list", "post": "create"}),
+        name="payroll-period-list",
+    ),
+    path(
+        "payroll/periods/<int:pk>/",
+        PayrollPeriodViewSet.as_view({"get": "retrieve"}),
+        name="payroll-period-detail",
+    ),
+    path(
+        "payroll/periods/<int:pk>/records/",
+        PayrollPeriodViewSet.as_view({"get": "records"}),
+        name="payroll-period-records",
+    ),
+    path(
+        "payroll/periods/<int:pk>/calculate/",
+        PayrollPeriodViewSet.as_view({"post": "calculate"}),
+        name="payroll-period-calculate",
+    ),
+    path(
+        "payroll/periods/<int:pk>/finalize/",
+        PayrollPeriodViewSet.as_view({"post": "finalize"}),
+        name="payroll-period-finalize",
     ),
 ]
