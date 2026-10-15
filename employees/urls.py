@@ -38,6 +38,11 @@ urlpatterns = [
         name="employee-hourly-rate",
     ),
     path(
+        "employees/<int:employee_id>/rate-history/",
+        EmployeeRateViewSet.as_view({"get": "history"}),
+        name="employee-rate-history",
+    ),
+    path(
         "employees/<int:employee_id>/shifts/",
         EmployeeShiftViewSet.as_view({"get": "list", "post": "create"}),
         name="employee-shifts",
