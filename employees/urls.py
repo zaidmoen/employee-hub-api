@@ -4,8 +4,15 @@ from employees.controllers.employee_controller import (
     EmployeeRateViewSet,
     EmployeeViewSet,
 )
+from employees.controllers.organization_controller import (
+    DepartmentViewSet,
+    EmployeeProfileViewSet,
+    PositionViewSet,
+)
 from employees.controllers.shift_controller import (
-    EmployeeShiftViewSet, ForecastedPayViewSet, ScheduledShiftViewSet,
+    EmployeeShiftViewSet,
+    ForecastedPayViewSet,
+    ScheduledShiftViewSet,
 )
 
 # Keep URLs explicit so each HTTP method clearly maps to a ViewSet action.
@@ -19,6 +26,11 @@ urlpatterns = [
         "employees/<int:pk>/",
         EmployeeViewSet.as_view({"get": "retrieve"}),
         name="employee-detail",
+    ),
+    path(
+        "employees/<int:employee_id>/profile/",
+        EmployeeProfileViewSet.as_view({"get": "retrieve", "put": "upsert"}),
+        name="employee-profile",
     ),
     path(
         "employees/<int:employee_id>/hourly-rate/",
@@ -43,5 +55,15 @@ urlpatterns = [
         "employees/<int:employee_id>/forecasted-pay/",
         ForecastedPayViewSet.as_view({"get": "forecast"}),
         name="employee-forecasted-pay",
+    ),
+    path(
+        "departments/",
+        DepartmentViewSet.as_view({"get": "list", "post": "create"}),
+        name="department-list",
+    ),
+    path(
+        "positions/",
+        PositionViewSet.as_view({"get": "list", "post": "create"}),
+        name="position-list",
     ),
 ]
